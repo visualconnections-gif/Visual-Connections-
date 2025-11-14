@@ -3,15 +3,17 @@
         const adElements = Array.from(adContainer.children);
         const slideshowContainer = document.getElementById('slideshow-container');
         const rotatingImage = document.getElementById('rotating-image');
-        const pauseButton = document.getElementById('pause-button'); // Reference the new button
+        const pauseButton = document.getElementById('pause-button');
 
         let currentAdIndex = 0;
-        const adInterval = 3000;
+        const adInterval = 3000; // 3 seconds automatic rotation
         let timer; 
-        let isPaused = false; // NEW STATE FLAG
+        let isPaused = false;
         
-        // --- FINAL PATH FIX ---
-        const basePath = window.location.pathname.replace('index.html', '');
+        // --- FINAL PATH FIX: Explicit Repository Name ---
+        // This is the most reliable way to fix the broken image issue on GitHub Pages
+        // by explicitly using the repository name for the base path.
+        const basePath = "/Visual-Connections-";
 
         // SWIPE GESTURE VARIABLES
         let touchstartX = 0;
@@ -24,12 +26,12 @@
             if (isPaused) {
                 // Resume rotation (Play)
                 timer = setInterval(rotateAd, adInterval);
-                pauseButton.innerHTML = '&#9208;'; // Change symbol to PAUSE
+                pauseButton.innerHTML = '&#9208;'; // PAUSE symbol
                 isPaused = false;
             } else {
                 // Stop rotation (Pause)
                 clearInterval(timer);
-                pauseButton.innerHTML = '&#9654;'; // Change symbol to PLAY
+                pauseButton.innerHTML = '&#9654;'; // PLAY symbol
                 isPaused = true;
             }
         }
@@ -45,6 +47,8 @@
             const currentAdData = adElements[currentAdIndex];
             const relativePath = currentAdData.getAttribute('data-file');
             
+            // CONCATENATE: basePath + relativePath (stripping the leading / from the data-file)
+            // Resulting URL structure: /Visual-Connections-/ads/Ad1.jpg
             rotatingImage.src = basePath + relativePath.substring(1); 
         }
 
@@ -54,7 +58,6 @@
         }
 
         function changeAd(direction) {
-            // Stop rotation, but ONLY restart if we aren't currently paused by the user
             clearInterval(timer); 
 
             let newIndex = currentAdIndex + direction;
@@ -66,7 +69,7 @@
             currentAdIndex = newIndex;
             updateAd();
             
-            // Only restart the timer if the user has NOT explicitly paused it
+            // Only restart the timer if the user hasn't paused it
             if (!isPaused) {
                 timer = setInterval(rotateAd, adInterval); 
             }
@@ -85,7 +88,6 @@
         });
 
         // --- SWIPE GESTURE LOGIC ---
-        // (Swiping also calls changeAd, which respects the isPaused flag)
 
         function handleGesture() {
             const swipeThreshold = 50; 
@@ -98,6 +100,7 @@
 
             isSwiping = true;
 
+            // Swiping also calls changeAd, which respects the isPaused flag
             if (swipeDistance > 0) {
                 changeAd(-1); // Swipe Right -> Previous Ad
             }
