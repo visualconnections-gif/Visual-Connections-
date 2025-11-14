@@ -1,16 +1,17 @@
     <script>
         const adContainer = document.getElementById('ad-data');
-        const adElements = Array.from(adContainer.children); // Gets all ad elements (the divs)
+        const adElements = Array.from(adContainer.children);
         const slideshowContainer = document.getElementById('slideshow-container');
         const rotatingImage = document.getElementById('rotating-image');
 
         let currentAdIndex = 0;
-        const adInterval = 3000; // 3 seconds automatic rotation
+        const adInterval = 3000;
         let timer; 
         
-        // --- NEW GLOBAL VARIABLE FOR GITHUB PAGES PATH FIX ---
-        // This prepends the repository name for correct routing on GitHub Pages.
-        const basePath = "/Visual-Connections-";
+        // --- NEW GITHUB PAGES PATH FIX ---
+        // We use window.location.pathname to dynamically get the correct base path, 
+        // which includes the repository name, regardless of capitalization.
+        const basePath = window.location.pathname.replace('index.html', '');
 
         // SWIPE GESTURE VARIABLES
         let touchstartX = 0;
@@ -28,8 +29,8 @@
             const currentAdData = adElements[currentAdIndex];
             const relativePath = currentAdData.getAttribute('data-file');
             
-            // CONCATENATE: Use the basePath + relative path
-            rotatingImage.src = basePath + relativePath; 
+            // CONCATENATE: Use the determined basePath + the relative path
+            rotatingImage.src = basePath + relativePath.substring(1); // Remove the leading slash from data-file
         }
 
         function rotateAd() {
@@ -38,7 +39,7 @@
         }
 
         function changeAd(direction) {
-            clearInterval(timer); // Clear auto-rotation
+            clearInterval(timer); 
             
             let newIndex = currentAdIndex + direction;
             if (newIndex < 0) {
@@ -49,7 +50,6 @@
             currentAdIndex = newIndex;
             updateAd();
             
-            // Restart the timer
             timer = setInterval(rotateAd, adInterval); 
         }
 
@@ -78,14 +78,12 @@
 
             isSwiping = true;
 
-            // Swipe Right motion (touch starts left, ends right) -> Go to PREVIOUS Ad (-1)
             if (swipeDistance > 0) {
-                changeAd(-1); 
+                changeAd(-1); // Swipe Right -> Previous Ad
             }
             
-            // Swipe Left motion (touch starts right, ends left) -> Go to NEXT Ad (+1)
             if (swipeDistance < 0) {
-                changeAd(1); 
+                changeAd(1); // Swipe Left -> Next Ad
             }
         }
 
