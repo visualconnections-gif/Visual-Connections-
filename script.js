@@ -10,10 +10,10 @@
         let timer; 
         let isPaused = false;
         
-        // --- FINAL PATH FIX: Explicit Repository Name ---
-        // This is the most reliable way to fix the broken image issue on GitHub Pages
-        // by explicitly using the repository name for the base path.
-        const basePath = "/Visual-Connections-";
+        // --- FINAL PATH FIX: Explicit Repository Name with Trailing Slash ---
+        // This is the most reliable path. It ensures the URL construction is correct:
+        // /Visual-Connections-/ads/Ad1.jpg
+        const basePath = "/Visual-Connections-/"; 
 
         // SWIPE GESTURE VARIABLES
         let touchstartX = 0;
@@ -47,8 +47,7 @@
             const currentAdData = adElements[currentAdIndex];
             const relativePath = currentAdData.getAttribute('data-file');
             
-            // CONCATENATE: basePath + relativePath (stripping the leading / from the data-file)
-            // Resulting URL structure: /Visual-Connections-/ads/Ad1.jpg
+            // CONCATENATE: basePath (with final slash) + relativePath (stripping the leading /)
             rotatingImage.src = basePath + relativePath.substring(1); 
         }
 
