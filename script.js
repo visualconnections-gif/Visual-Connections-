@@ -3,20 +3,36 @@
         const adElements = Array.from(adContainer.children);
         const slideshowContainer = document.getElementById('slideshow-container');
         const rotatingImage = document.getElementById('rotating-image');
+        const pauseButton = document.getElementById('pause-button'); // Reference the new button
 
         let currentAdIndex = 0;
         const adInterval = 3000;
         let timer; 
+        let isPaused = false; // NEW STATE FLAG
         
-        // --- NEW GITHUB PAGES PATH FIX ---
-        // We use window.location.pathname to dynamically get the correct base path, 
-        // which includes the repository name, regardless of capitalization.
+        // --- FINAL PATH FIX ---
         const basePath = window.location.pathname.replace('index.html', '');
 
         // SWIPE GESTURE VARIABLES
         let touchstartX = 0;
         let touchendX = 0;
         let isSwiping = false; 
+
+        // --- Pause Functionality ---
+
+        function togglePause() {
+            if (isPaused) {
+                // Resume rotation (Play)
+                timer = setInterval(rotateAd, adInterval);
+                pauseButton.innerHTML = '&#9208;'; // Change symbol to PAUSE
+                isPaused = false;
+            } else {
+                // Stop rotation (Pause)
+                clearInterval(timer);
+                pauseButton.innerHTML = '&#9654;'; // Change symbol to PLAY
+                isPaused = true;
+            }
+        }
 
         // --- Core Functions ---
 
@@ -29,8 +45,7 @@
             const currentAdData = adElements[currentAdIndex];
             const relativePath = currentAdData.getAttribute('data-file');
             
-            // CONCATENATE: Use the determined basePath + the relative path
-            rotatingImage.src = basePath + relativePath.substring(1); // Remove the leading slash from data-file
+            rotatingImage.src = basePath + relativePath.substring(1); 
         }
 
         function rotateAd() {
@@ -39,8 +54,9 @@
         }
 
         function changeAd(direction) {
+            // Stop rotation, but ONLY restart if we aren't currently paused by the user
             clearInterval(timer); 
-            
+
             let newIndex = currentAdIndex + direction;
             if (newIndex < 0) {
                 newIndex = adElements.length - 1;
@@ -50,7 +66,10 @@
             currentAdIndex = newIndex;
             updateAd();
             
-            timer = setInterval(rotateAd, adInterval); 
+            // Only restart the timer if the user has NOT explicitly paused it
+            if (!isPaused) {
+                timer = setInterval(rotateAd, adInterval); 
+            }
         }
 
         // --- Hot Link Click/Tap Handler ---
@@ -66,6 +85,7 @@
         });
 
         // --- SWIPE GESTURE LOGIC ---
+        // (Swiping also calls changeAd, which respects the isPaused flag)
 
         function handleGesture() {
             const swipeThreshold = 50; 
