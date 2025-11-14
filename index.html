@@ -9,7 +9,7 @@
 
     <style>
         /* --------------------------------------------------------------------
-           THEME: High-Contrast Minimalist (Fixes applied)
+           THEME: High-Contrast Minimalist (CSS is finalized and correct)
            -------------------------------------------------------------------- */
         body {
             margin: 0;
@@ -102,50 +102,4 @@
         <button class="nav-button" onclick="changeAd(-1)">&#9664;</button> <button class="nav-button" onclick="changeAd(1)">&#9654;</button>  </div>
 
     <div id="ad-data" style="display:none;">
-        <div data-file="/Visual-Connections-/ads/Ad1.jpg" data-link="https://www.google.com/"></div>
-        <div data-file="/Visual-Connections-/ads/Ad2.jpg" data-link="https://github.com/visualconnections-gif"></div>
-        <div data-file="/Visual-Connections-/ads/Ad3.jpg" data-link="https://www.example.com/client3"></div>
-        <div data-file="/Visual-Connections-/ads/Ad4.jpg" data-link="https://www.example.com/client4"></div>
-        <div data-file="/Visual-Connections-/ads/Ad5.jpg" data-link="https://www.example.com/client5"></div>
-        <div data-file="/Visual-Connections-/ads/Ad6.jpg" data-link="https://www.example.com/client6"></div>
-        <div data-file="/Visual-Connections-/ads/Ad7.jpg" data-link="https://www.example.com/client7"></div>
-        <div data-file="/Visual-Connections-/ads/Ad8.jpg" data-link="https://www.example.com/client8"></div>
-        <div data-file="/Visual-Connections-/ads/Ad9.jpg" data-link="https://www.example.com/client9"></div>
-        <div data-file="/Visual-Connections-/ads/Ad10.jpg" data-link="https://www.example.com/client10"></div>
-    </div>
-
-
-    <script>
-        const adContainer = document.getElementById('ad-data');
-        const adElements = Array.from(adContainer.children); // Gets all ad elements (the divs)
-        const slideshowContainer = document.getElementById('slideshow-container');
-        const rotatingImage = document.getElementById('rotating-image');
-
-        let currentAdIndex = 0;
-        const adInterval = 3000; // 3 seconds automatic rotation
-        let timer; 
-        
-        // SWIPE GESTURE VARIABLES
-        let touchstartX = 0;
-        let touchendX = 0;
-        let isSwiping = false; 
-
-        // --- Core Functions ---
-
-        function updateAd() {
-            if (adElements.length === 0) {
-                rotatingImage.src = ''; 
-                rotatingImage.alt = 'No Ads Found. Check Ad Data.';
-                return;
-            }
-            const currentAdData = adElements[currentAdIndex];
-            rotatingImage.src = currentAdData.getAttribute('data-file');
-        }
-
-        function rotateAd() {
-            currentAdIndex = (currentAdIndex + 1) % adElements.length;
-            updateAd();
-        }
-
-        function changeAd(direction) {
-            clearInterval(timer); // Clear auto-rotation
+        <div data-file="/ads/Ad1.jpg" data-link="https://

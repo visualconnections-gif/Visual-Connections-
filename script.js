@@ -8,10 +8,14 @@
         const adInterval = 3000; // 3 seconds automatic rotation
         let timer; 
         
+        // --- NEW GLOBAL VARIABLE FOR GITHUB PAGES PATH FIX ---
+        // This prepends the repository name for correct routing on GitHub Pages.
+        const basePath = "/Visual-Connections-";
+
         // SWIPE GESTURE VARIABLES
         let touchstartX = 0;
         let touchendX = 0;
-        let isSwiping = false; // Flag to prevent link opening during a swipe
+        let isSwiping = false; 
 
         // --- Core Functions ---
 
@@ -22,7 +26,10 @@
                 return;
             }
             const currentAdData = adElements[currentAdIndex];
-            rotatingImage.src = currentAdData.getAttribute('data-file');
+            const relativePath = currentAdData.getAttribute('data-file');
+            
+            // CONCATENATE: Use the basePath + relative path
+            rotatingImage.src = basePath + relativePath; 
         }
 
         function rotateAd() {
@@ -48,15 +55,14 @@
 
         // --- Hot Link Click/Tap Handler ---
         rotatingImage.addEventListener('click', () => {
-            // Prevent link from opening if the user was actively swiping (distance > 10px)
             if (!isSwiping) { 
                 const currentAdData = adElements[currentAdIndex];
                 const link = currentAdData.getAttribute('data-link');
                 if (link) {
-                    window.open(link, '_blank'); // Opens link in a new tab/window
+                    window.open(link, '_blank'); 
                 }
             }
-            isSwiping = false; // Reset the flag after potential click
+            isSwiping = false; 
         });
 
         // --- SWIPE GESTURE LOGIC ---
@@ -88,7 +94,6 @@
         }, false);
 
         slideshowContainer.addEventListener('touchmove', e => {
-            // Update touchendX as the user swipes
             touchendX = e.changedTouches[0].screenX; 
         }, false);
 
